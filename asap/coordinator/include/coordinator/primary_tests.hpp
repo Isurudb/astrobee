@@ -15,9 +15,9 @@ void PrimaryNodelet::RunTest0(ros::NodeHandle *nh){
 
     
     ros::Duration(5.0).sleep();
-    ROS_INFO("Undocking the Astrobee ");
+    /* ROS_INFO("Undocking the Astrobee ");
     NODELET_INFO_STREAM("Calling " << undock_command);
-    system_ret = system(undock_command.c_str());
+    system_ret = system(undock_command.c_str()); */
 
     if(system_ret != 0){
         NODELET_ERROR_STREAM("[PRIMARY/DMPC] Failed to Launch DMPC nodes.");
@@ -30,7 +30,7 @@ void PrimaryNodelet::RunTest0(ros::NodeHandle *nh){
 
     ROS_INFO("Position data successfully initialized!");
 
-    ROS_INFO("Rotate the previous pose by 180* about Z ....");
+   // ROS_INFO("Rotate the previous pose by 180* about Z ....");
 
     //disable_default_ctl();
     //check_regulate();  // check regulation until satisfied
