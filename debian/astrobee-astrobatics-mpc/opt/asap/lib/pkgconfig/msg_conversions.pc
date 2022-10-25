@@ -1,0 +1,8 @@
+prefix=/home/isuru/Forked_astrobee/astrobee/src/debian/tmp/opt/asap
+
+Name: msg_conversions
+Description: Description of msg_conversions
+Version: 1.0.0
+Cflags: -I/home/isuru/Forked_astrobee/astrobee/src/debian/tmp/opt/asap/include
+Libs: -L/home/isuru/Forked_astrobee/astrobee/src/debian/tmp/opt/asap/lib -lmsg_conversions
+Requires: roscpp message_runtime std_msgs geometry_msgs config_reader tf2 tf2_ros

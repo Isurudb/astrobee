@@ -1,0 +1,8 @@
+prefix=/home/isuru/Forked_astrobee/astrobee/src/debian/tmp/opt/asap
+
+Name: coordinator
+Description: Description of coordinator
+Version: 0.0.0
+Cflags: -I/home/isuru/Forked_astrobee/astrobee/src/debian/tmp/opt/asap/include
+Libs: -L/home/isuru/Forked_astrobee/astrobee/src/debian/tmp/opt/asap/lib -lPrimaryNodelet -lSecondaryNodelet
+Requires: roscpp nodelet pluginlib actionlib tf ff_msgs ff_util std_msgs geometry_msgs ff_common ff_nodelet msg_conversions ff_flight

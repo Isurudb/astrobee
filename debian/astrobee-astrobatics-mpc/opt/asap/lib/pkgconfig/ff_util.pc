@@ -1,0 +1,8 @@
+prefix=/home/isuru/Forked_astrobee/astrobee/src/debian/tmp/opt/asap
+
+Name: ff_util
+Description: Description of ff_util
+Version: 1.0.0
+Cflags: -I/home/isuru/Forked_astrobee/astrobee/src/debian/tmp/opt/asap/include
+Libs: -L/home/isuru/Forked_astrobee/astrobee/src/debian/tmp/opt/asap/lib -lff_nodelet -lff_flight -lconfig_server -lconfig_client -lperf_timer
+Requires: config_reader roscpp nodelet dynamic_reconfigure ff_msgs diagnostic_msgs tf2_geometry_msgs actionlib msg_conversions

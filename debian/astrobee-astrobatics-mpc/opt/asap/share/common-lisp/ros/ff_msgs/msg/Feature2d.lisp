@@ -1,0 +1,112 @@
+; Auto-generated. Do not edit!
+
+
+(cl:in-package ff_msgs-msg)
+
+
+;//! \htmlinclude Feature2d.msg.html
+
+(cl:defclass <Feature2d> (roslisp-msg-protocol:ros-message)
+  ((id
+    :reader id
+    :initarg :id
+    :type cl:fixnum
+    :initform 0)
+   (x
+    :reader x
+    :initarg :x
+    :type cl:float
+    :initform 0.0)
+   (y
+    :reader y
+    :initarg :y
+    :type cl:float
+    :initform 0.0))
+)
+
+(cl:defclass Feature2d (<Feature2d>)
+  ())
+
+(cl:defmethod cl:initialize-instance :after ((m <Feature2d>) cl:&rest args)
+  (cl:declare (cl:ignorable args))
+  (cl:unless (cl:typep m 'Feature2d)
+    (roslisp-msg-protocol:msg-deprecation-warning "using old message class name ff_msgs-msg:<Feature2d> is deprecated: use ff_msgs-msg:Feature2d instead.")))
+
+(cl:ensure-generic-function 'id-val :lambda-list '(m))
+(cl:defmethod id-val ((m <Feature2d>))
+  (roslisp-msg-protocol:msg-deprecation-warning "Using old-style slot reader ff_msgs-msg:id-val is deprecated.  Use ff_msgs-msg:id instead.")
+  (id m))
+
+(cl:ensure-generic-function 'x-val :lambda-list '(m))
+(cl:defmethod x-val ((m <Feature2d>))
+  (roslisp-msg-protocol:msg-deprecation-warning "Using old-style slot reader ff_msgs-msg:x-val is deprecated.  Use ff_msgs-msg:x instead.")
+  (x m))
+
+(cl:ensure-generic-function 'y-val :lambda-list '(m))
+(cl:defmethod y-val ((m <Feature2d>))
+  (roslisp-msg-protocol:msg-deprecation-warning "Using old-style slot reader ff_msgs-msg:y-val is deprecated.  Use ff_msgs-msg:y instead.")
+  (y m))
+(cl:defmethod roslisp-msg-protocol:serialize ((msg <Feature2d>) ostream)
+  "Serializes a message object of type '<Feature2d>"
+  (cl:write-byte (cl:ldb (cl:byte 8 0) (cl:slot-value msg 'id)) ostream)
+  (cl:write-byte (cl:ldb (cl:byte 8 8) (cl:slot-value msg 'id)) ostream)
+  (cl:let ((bits (roslisp-utils:encode-single-float-bits (cl:slot-value msg 'x))))
+    (cl:write-byte (cl:ldb (cl:byte 8 0) bits) ostream)
+    (cl:write-byte (cl:ldb (cl:byte 8 8) bits) ostream)
+    (cl:write-byte (cl:ldb (cl:byte 8 16) bits) ostream)
+    (cl:write-byte (cl:ldb (cl:byte 8 24) bits) ostream))
+  (cl:let ((bits (roslisp-utils:encode-single-float-bits (cl:slot-value msg 'y))))
+    (cl:write-byte (cl:ldb (cl:byte 8 0) bits) ostream)
+    (cl:write-byte (cl:ldb (cl:byte 8 8) bits) ostream)
+    (cl:write-byte (cl:ldb (cl:byte 8 16) bits) ostream)
+    (cl:write-byte (cl:ldb (cl:byte 8 24) bits) ostream))
+)
+(cl:defmethod roslisp-msg-protocol:deserialize ((msg <Feature2d>) istream)
+  "Deserializes a message object of type '<Feature2d>"
+    (cl:setf (cl:ldb (cl:byte 8 0) (cl:slot-value msg 'id)) (cl:read-byte istream))
+    (cl:setf (cl:ldb (cl:byte 8 8) (cl:slot-value msg 'id)) (cl:read-byte istream))
+    (cl:let ((bits 0))
+      (cl:setf (cl:ldb (cl:byte 8 0) bits) (cl:read-byte istream))
+      (cl:setf (cl:ldb (cl:byte 8 8) bits) (cl:read-byte istream))
+      (cl:setf (cl:ldb (cl:byte 8 16) bits) (cl:read-byte istream))
+      (cl:setf (cl:ldb (cl:byte 8 24) bits) (cl:read-byte istream))
+    (cl:setf (cl:slot-value msg 'x) (roslisp-utils:decode-single-float-bits bits)))
+    (cl:let ((bits 0))
+      (cl:setf (cl:ldb (cl:byte 8 0) bits) (cl:read-byte istream))
+      (cl:setf (cl:ldb (cl:byte 8 8) bits) (cl:read-byte istream))
+      (cl:setf (cl:ldb (cl:byte 8 16) bits) (cl:read-byte istream))
+      (cl:setf (cl:ldb (cl:byte 8 24) bits) (cl:read-byte istream))
+    (cl:setf (cl:slot-value msg 'y) (roslisp-utils:decode-single-float-bits bits)))
+  msg
+)
+(cl:defmethod roslisp-msg-protocol:ros-datatype ((msg (cl:eql '<Feature2d>)))
+  "Returns string type for a message object of type '<Feature2d>"
+  "ff_msgs/Feature2d")
+(cl:defmethod roslisp-msg-protocol:ros-datatype ((msg (cl:eql 'Feature2d)))
+  "Returns string type for a message object of type 'Feature2d"
+  "ff_msgs/Feature2d")
+(cl:defmethod roslisp-msg-protocol:md5sum ((type (cl:eql '<Feature2d>)))
+  "Returns md5sum for a message object of type '<Feature2d>"
+  "161fd0d6659eb739813ad3746d9abddf")
+(cl:defmethod roslisp-msg-protocol:md5sum ((type (cl:eql 'Feature2d)))
+  "Returns md5sum for a message object of type 'Feature2d"
+  "161fd0d6659eb739813ad3746d9abddf")
+(cl:defmethod roslisp-msg-protocol:message-definition ((type (cl:eql '<Feature2d>)))
+  "Returns full string definition for message of type '<Feature2d>"
+  (cl:format cl:nil "# Copyright (c) 2017, United States Government, as represented by the~%# Administrator of the National Aeronautics and Space Administration.~%# ~%# All rights reserved.~%# ~%# The Astrobee platform is licensed under the Apache License, Version 2.0~%# (the \"License\"); you may not use this file except in compliance with the~%# License. You may obtain a copy of the License at~%# ~%#     http://www.apache.org/licenses/LICENSE-2.0~%# ~%# Unless required by applicable law or agreed to in writing, software~%# distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT~%# WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the~%# License for the specific language governing permissions and limitations~%# under the License.~%#~%# A single observation of a feature, with an ID and coordinates.~%# Used for an optical flow feature.~%~%uint16 id # feature ID~%float32 x # feature x coordinate~%float32 y # feature y coordinate~%~%~%"))
+(cl:defmethod roslisp-msg-protocol:message-definition ((type (cl:eql 'Feature2d)))
+  "Returns full string definition for message of type 'Feature2d"
+  (cl:format cl:nil "# Copyright (c) 2017, United States Government, as represented by the~%# Administrator of the National Aeronautics and Space Administration.~%# ~%# All rights reserved.~%# ~%# The Astrobee platform is licensed under the Apache License, Version 2.0~%# (the \"License\"); you may not use this file except in compliance with the~%# License. You may obtain a copy of the License at~%# ~%#     http://www.apache.org/licenses/LICENSE-2.0~%# ~%# Unless required by applicable law or agreed to in writing, software~%# distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT~%# WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the~%# License for the specific language governing permissions and limitations~%# under the License.~%#~%# A single observation of a feature, with an ID and coordinates.~%# Used for an optical flow feature.~%~%uint16 id # feature ID~%float32 x # feature x coordinate~%float32 y # feature y coordinate~%~%~%"))
+(cl:defmethod roslisp-msg-protocol:serialization-length ((msg <Feature2d>))
+  (cl:+ 0
+     2
+     4
+     4
+))
+(cl:defmethod roslisp-msg-protocol:ros-message-to-list ((msg <Feature2d>))
+  "Converts a ROS message object to a list"
+  (cl:list 'Feature2d
+    (cl:cons ':id (id msg))
+    (cl:cons ':x (x msg))
+    (cl:cons ':y (y msg))
+))

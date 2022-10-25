@@ -1,0 +1,8 @@
+prefix=/home/isuru/Forked_astrobee/astrobee/src/debian/tmp/opt/asap
+
+Name: config_reader
+Description: Description of config_reader
+Version: 1.0.0
+Cflags: -I/home/isuru/Forked_astrobee/astrobee/src/debian/tmp/opt/asap/include -I/home/isuru/arm_cross/rootfs/usr/include/luajit-2.0
+Libs: -L/home/isuru/Forked_astrobee/astrobee/src/debian/tmp/opt/asap/lib -lconfig_reader /home/isuru/arm_cross/rootfs/usr/lib/arm-linux-gnueabihf/libluajit-5.1.so /home/isuru/arm_cross/rootfs/usr/lib/arm-linux-gnueabihf/libm.so
+Requires: roscpp nodelet ff_common
