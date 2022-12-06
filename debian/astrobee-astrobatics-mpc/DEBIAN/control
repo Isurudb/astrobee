@@ -3,7 +3,7 @@ Source: astrobee
 Version: 0.16.6
 Architecture: armhf
 Maintainer: Astrobee Flight Software <astrobee-fsw@nx.arc.nasa.gov>
-Installed-Size: 29449
+Installed-Size: 29453
 Section: libs
 Priority: optional
 Homepage: http://github.com/nasa/astrobee
