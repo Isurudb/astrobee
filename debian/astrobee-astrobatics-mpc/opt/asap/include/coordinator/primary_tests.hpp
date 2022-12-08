@@ -23,9 +23,15 @@ void PrimaryNodelet::RunTest0(ros::NodeHandle *nh){
         NODELET_ERROR_STREAM("[PRIMARY/DMPC] Failed to Launch DMPC nodes.");
     }
     ROS_INFO("Initializing the position data....");
-    position_ref.x = 0.50;
-    position_ref.y =  -0.60;
-    position_ref.z =  position_.z+0.00;
+    position_ref.x = 0.7;
+    position_ref.y = -0.7;
+    position_ref.z = +0.00;
+   /*  z_nominal[0]=x0[0];
+      z_nominal[1]=x0[1];
+      z_nominal[2]=x0[2];
+      z_nominal[3]=x0[3];
+      z_nominal[4]=x0[4];
+      z_nominal[5]=x0[5]; */
     initialzation=true;
 
     ROS_INFO("Position data successfully initialized!");
@@ -79,9 +85,9 @@ primary_status_.control_mode = "regulate";
         float R_32 = 2*(attitude.y*attitude.z + attitude.w*attitude.x);
         float R_33 = 2*(attitude.z*attitude.z + attitude.w*attitude.w)-1;
 
-        float u_x = kN[0];//Fx;//arg_fx;//-13.5*velocity_.x -0.85*position_error.x;
-        float u_y = kN[1];//]Fy;//arg_fy;//-13.5*velocity_.y -0.85*position_error.y;
-        float u_z = kN[2];//Fz;//arg_fz;//-1.0*velocity_.z -0.1*position_error.z;
+        float u_x = -kN[0];//Fx;//arg_fx;//-13.5*velocity_.x -0.85*position_error.x;
+        float u_y = -kN[1];//]Fy;//arg_fy;//-13.5*velocity_.y -0.85*position_error.y;
+        float u_z = -kN[2];//Fz;//arg_fz;//-1.0*velocity_.z -0.1*position_error.z;
 
 
 
@@ -173,9 +179,9 @@ primary_status_.control_mode = "regulate";
         float R_32 = 2*(attitude.y*attitude.z + attitude.w*attitude.x);
         float R_33 = 2*(attitude.z*attitude.z + attitude.w*attitude.w)-1;
 
-        float u_x = X_QP[0];//Fx;//arg_fx;//-13.5*velocity_.x -0.85*position_error.x;
-        float u_y = X_QP[1];//]Fy;//arg_fy;//-13.5*velocity_.y -0.85*position_error.y;
-        float u_z = X_QP[2];//Fz;//arg_fz;//-1.0*velocity_.z -0.1*position_error.z;
+        float u_x = -X_QP[0];//Fx;//arg_fx;//-13.5*velocity_.x -0.85*position_error.x;
+        float u_y = -X_QP[1];//]Fy;//arg_fy;//-13.5*velocity_.y -0.85*position_error.y;
+        float u_z = -X_QP[2];//Fz;//arg_fz;//-1.0*velocity_.z -0.1*position_error.z;
 
 
 
