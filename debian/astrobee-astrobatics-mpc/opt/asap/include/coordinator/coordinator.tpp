@@ -243,15 +243,13 @@ double v_mpc[3];
 bool initial_run = true;
 bool initialzation = false;
 
-int count=0;
-
 double kn_tilda[3];
 double kN[3];
 bool rotation_done = false;
 void step_PID();
 
 // Function Declarations
-//void main_MPC_Guidance_v3_sand();
+void main_MPC_Guidance_v3_sand();
 void MPC_Guidance_v3_sand();
 void mldivide(double A[3600], double B[60]);
 bool rtIsNaN(double value);
@@ -484,36 +482,19 @@ void CoordinatorBase<T>::ekf_callback(const ff_msgs::EkfState::ConstPtr msg) {
     omega.x=wx;
     omega.y=wy;
     omega.z=wz;
-    geometry_msgs::Vector3 torque, axes_rot;
-    double r=0, p=0, y=-1*3.1459/4;  // Rotate the previous pose by 45* about Z
-    axes_rot.x = 0;
-    axes_rot.y = 0;
-    axes_rot.z = 1;
-    double angle = 45/180*3.14570;
+    geometry_msgs::Vector3 torque;
+    double r=0, p=0, y=-1*3.1457/4;  // Rotate the previous pose by 180* about Z
+
         q_ref.setRPY(r, p, y);
-        //q_ref.setRotation(axes_rot, 45/180*3.14570);
         tf2::convert(attitude,attitude_);
         q_ref_inv=q_ref.inverse();//
   q_e= q_ref_inv*attitude_;  // Calculate the new orientation
   q_e.normalize();
-        float R_11 = 2*(attitude.x*attitude.x + attitude.w*attitude.w)-1;
-        float R_12 = 2*(attitude.x*attitude.y - attitude.w*attitude.z);
-        float R_13 = 2*(attitude.x*attitude.z + attitude.w*attitude.y); 
-        float R_21 = 2*(attitude.x*attitude.y + attitude.w*attitude.z);
-        float R_22 = 2*(attitude.y*attitude.y + attitude.w*attitude.w)-1;
-        float R_23 = 2*(attitude.y*attitude.z - attitude.w*attitude.x);
-        float R_31 = 2*(attitude.x*attitude.z - attitude.w*attitude.y); 
-        float R_32 = 2*(attitude.y*attitude.z + attitude.w*attitude.x);
-        float R_33 = 2*(attitude.z*attitude.z + attitude.w*attitude.w)-1;
-        
-        float cm_x =-0.3;
-        float cm_y =0.0;
-        float cm_z =0.0;
 
 
-    position_.x = px ;//+ (cm_x*R_11 + cm_y*R_21 + cm_z*R_31);
-    position_.y = py ;//+ (cm_x*R_12 + cm_y*R_22 + cm_z*R_32);
-    position_.z = pz ;//+ (cm_x*R_13 + cm_y*R_23 + cm_z*R_33);
+    position_.x = px;
+    position_.y = py;
+    position_.z = pz;
 
     /* position_ref.x = 10.8333388725;
     position_ref.y = -9.41988714508+0.5;
@@ -556,13 +537,8 @@ void CoordinatorBase<T>::ekf_callback(const ff_msgs::EkfState::ConstPtr msg) {
     x0[3]=vx;
     x0[4]=vy;
     x0[5]=vz;
-    MPC_Guidance_v3_sand();
-    v_mpc[0]=Fx;
-    v_mpc[1]=Fy;
-    v_mpc[2]=Fz;
-    nominal_dynamics();
-    //sqrt(q_e.getX()*q_e.getX()+q_e.getY()*q_e.getY()+q_e.getZ()*q_e.getZ())>0.005
-    if (count==0){
+    main_MPC_Guidance_v3_sand();
+    if (sqrt(q_e.getX()*q_e.getX()+q_e.getY()*q_e.getY()+q_e.getZ()*q_e.getZ())>0.05){
       z_nominal[0]=x0[0];
       z_nominal[1]=x0[1];
       z_nominal[2]=x0[2];
@@ -585,24 +561,22 @@ void CoordinatorBase<T>::ekf_callback(const ff_msgs::EkfState::ConstPtr msg) {
 
     }
 
-    
+    v_mpc[0]=Fx;
+    v_mpc[1]=Fy;
+    v_mpc[2]=Fz;
+    nominal_dynamics();
     kn_tilda[0]=Fx;
     kn_tilda[1]=Fy;
     kn_tilda[2]=Fz;
 
-      /* double sx=x0[0]-zp_nextNominal[0];
+      double sx=x0[0]-zp_nextNominal[0];
       double sy=x0[1]-zp_nextNominal[1];
       double sz=x0[2]-zp_nextNominal[2];
       double svx=x0[3]-zp_nextNominal[3];
       double svy=x0[4]-zp_nextNominal[4];
-      double svz=x0[5]-zp_nextNominal[5]; */
+      double svz=x0[5]-zp_nextNominal[5];
 
     tubing_mpc();
-    count+=1;
-    if (count==101){
-
-      count =0;
-    }
     //X_QP=X_Qp
    // rt_OneStep();
    //ROS_INFO("ex: [%f]  ey: [%f] ez: [%f] ev_x: [%f] ev_y: [%f] ev_z: [%f]", sx,sy,sz,svx,svy,svz);
@@ -624,9 +598,8 @@ void CoordinatorBase<T>::debug(){
 /* *************************************************************************** */
 template<typename T>
 void CoordinatorBase<T>::tubing_mpc(){
-  //sub-checkpoint --------------------------------------->>>>>
-  double a[18] = { 2.0202, 0.0, 0.0, 0.0, 2.0202, 0.0, 0.0, 0.0,
-    2.0202, 4.0895, 0.0, 0.0, 0.0, 4.0895, 0.0, 0.0, 0.0, 4.0895 };
+  double a[18] = { 0.95998, 0.0, 0.0, 0.0, 0.95998, 0.0, 0.0, 0.0,
+    0.95998, 1.9433, 0.0, 0.0, 0.0, 1.9433, 0.0, 0.0, 0.0, 1.9433 };
   double b_x[6];
   double d;
 
@@ -656,14 +629,13 @@ void CoordinatorBase<T>::tubing_mpc(){
 /* **************************************************************************** */
 template<typename T>
 void CoordinatorBase<T>::nominal_dynamics(){
-  // checkpoint nominal dynamics --------------------------->>>>>>>>
    double b_a[36] = { 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0,
-    0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 2.0, 0.0, 0.0, 1.0, 0.0, 0.0,
-    0.0, 2.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 2.0, 0.0, 0.0, 1.0 };
+    0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.016, 0.0, 0.0, 1.0, 0.0, 0.0,
+    0.0, 0.016, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.016, 0.0, 0.0, 1.0 };
 
-   double a[18] = { 0.082557, 0.0, 0.0, 0.082557, 0.0, 0.0, 0.0,
-    0.082557, 0.0, 0.0, 0.082557, 0.0, 0.0, 0.0, 0.082557, 0.0, 0.0,
-    0.082557 };
+   double a[18] = { 1.3361E-5, 0.0, 0.0, 0.0016701, 0.0, 0.0, 0.0,
+    1.3361E-5, 0.0, 0.0, 0.0016701, 0.0, 0.0, 0.0, 1.3361E-5, 0.0, 0.0,
+    0.0016701 };
 
    double d;
 
@@ -734,7 +706,7 @@ void CoordinatorBase<T>::step_PID(){
   }
 
 
- /*  tmp[0] = arg_qx;
+  tmp[0] = arg_qx;
   tmp[1] = arg_qy;
   tmp[2] = arg_qz;
   tmp[3] = arg_omegax;
@@ -745,102 +717,13 @@ void CoordinatorBase<T>::step_PID(){
     for (i_0 = 0; i_0 < 6; i_0++) {
       tau[i] += a_0[3 * i_0 + i] * tmp[i_0];
     }
-  } */
+  }
  arg_fx=u[0];
  arg_fy=u[1];
  arg_fz=u[2];
-
-
- double qw = arg_qx;
- double qx = arg_qx;
- double qy = arg_qy;
- double qz = arg_qz;
- double fx = Fx; 
- double fy = Fy;
- double fz = Fz;
- double Omega1 = arg_omegax;
- double Omega2 = arg_omegay;
- double Omega3 = arg_omegaz;
-//check point attitude controller -------------------------------->>>
-float a1[18] = { -0.11816682123356198, -0.0, -0.0, -0.0,
-    -0.43472762491780986, -0.0, -0.0, -0.0, -0.35981497968424792,
-    -1.18166821233562, -0.0, -0.0, -0.0, -4.3472762491780985, -0.0, -0.0, -0.0,
-    -3.5981497968424794 };
-
-  static const real_T b_a[9] = { 0.0, -0.030686081370449678, 0.0,
-    0.030686081370449678, 0.0, 0.061372162740899357, -0.0, -0.061372162740899357,
-    0.0 };
-
-  real_T dv[9];
-  real_T b_qx[6];
-  real_T U[3];
-  real_T dv1[3];
-  real_T d;
-  real_T d1;
-  real_T d2;
-  real_T d3;
-  real_T d4;
-  //int32_T i;
-
-  // best case
-  // 5.58;%9.58;%=2*9.58;
-  // 9.58;
-  //  d=0.6; % Distance between two Astrobee com
-  // d/5;
-  //  M=2;%linear density of arm kg/m
-  // J1=M*l^3/4
-  // J2=M*l^3/4
-  // 0.453105990000000;% =2*0.153427995+13/16 Ml^2 Ixx of compund object
-  // 0.540000000000000;%3*M*l^2;
-  // 10.236728099999999 ;%=190/16M*l^2+2*(J1+J2+0.14271405)+9*9.58*l^2 Iyy of compund object 
-  // 9.960905517999999 ;%=162/16*M*l^2+2*(J1+J2+0.162302759)+9*9.58*l^2 Izz of compund object 
-  //  Ix=0.306855990;% =2*0.153427995 Ixx of compund object
-  //  Iy=7.183028100000000 ;%=2*0.14271405+m*d^2 Iyy of compund object
-  //  Iz=7.222205518000000 ;%=2*0.162302759+m*d^2 Izz of compund object
-  //  PD gains
-  // 1
-  b_qx[0] = qx;
-  b_qx[1] = qy;
-  b_qx[2] = qz;
-  b_qx[3] = Omega1;
-  b_qx[4] = Omega2;
-  b_qx[5] = Omega3;
-  d = qw * qw;
-  dv[0] = (2.0 * (d + (qx * qx))) - 1.0;
-  d1 = qx * qy;
-  d2 = qw * qz;
-  dv[3] = 2.0 * (d1 - d2);
-  d3 = qx * qz;
-  d4 = qw * qy;
-  dv[6] = 2.0 * (d3 + d4);
-  dv[1] = 2.0 * (d1 + d2);
-  dv[4] = (2.0 * (d + (qy * qy))) - 1.0;
-  d1 = qy * qz;
-  d2 = qw * qx;
-  dv[7] = 2.0 * (d1 - d2);
-  dv[2] = 2.0 * (d3 - d4);
-  dv[5] = 2.0 * (d1 + d2);
-  dv[8] = (2.0 * (d + (qz * qz))) - 1.0;
-  for (i = 0; i < 3; i++) {
-    dv1[i] = ((dv[i] * Fx) + (dv[i + 3] * Fy)) + (dv[i + 6] * Fz);
-    d = 0.0;
-    for (int32_T i1 = 0; i1 < 6; i1++) {
-      d += a[i + (3 * i1)] * b_qx[i1];
-    }
-
-    U[i] = d;
-  }
-
-  d = dv1[0];
-  d1 = dv1[1];
-  d2 = dv1[2];
-  for (i = 0; i < 3; i++) {
-    U[i] -= ((b_a[i] * d) + (b_a[i + 3] * d1)) + (b_a[i + 6] * d2);
-  }
-
-  arg_tau_x = U[0];
-  arg_tau_y = U[1];
-  arg_tau_z = U[2];
+ arg_tau_x=tau[0];
+ arg_tau_y=tau[1];
+ arg_tau_z=tau[2];
 
 
 }
@@ -946,8 +829,8 @@ void CoordinatorBase<T>::enable_default_ctl() {
 }
 
 
-//template<typename T>
-/* void CoordinatorBase<T>::main_MPC_Guidance_v3_sand()
+template<typename T>
+void CoordinatorBase<T>::main_MPC_Guidance_v3_sand()
 {
 
   // Initialize function 'MPC_Guidance_v3_sand' input arguments.
@@ -955,7 +838,7 @@ void CoordinatorBase<T>::enable_default_ctl() {
   // Call the entry-point 'MPC_Guidance_v3_sand'.
   
   MPC_Guidance_v3_sand();
-} */
+}
 
 
 template<typename T>
@@ -2525,7 +2408,7 @@ void CoordinatorBase<T>::MPC_Guidance_v3_sand()
     0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
     0.0, 0.0, 0.0, 1.3361E-5, 0.0, 0.0, 0.0016701 };
 
-   double b_H[3600] = {221.86203408940816, -1.7935051601617053E-14,
+   double b_H[3600] = { 221.86203408940816, -1.7935051601617053E-14,
     -6.8847619827685469E-14, 21.293254106153611, -1.8032929589223377E-14,
     -6.6941200628136871E-14, 20.724478346088514, -1.8130770959550388E-14,
     -6.5035494641906465E-14, 20.155702871419727, -1.8228612329877396E-14,
@@ -3725,7 +3608,7 @@ void CoordinatorBase<T>::MPC_Guidance_v3_sand()
     10.967614667097754, -4.4091156180147686E-15, 1.0694800543029299E-14,
     10.962126040337028, -2.7487641836893721E-15, 1.1944721696319829E-14,
     10.9566374135763, -1.088350615113758E-15, 1.3194689624595515E-14,
-    210.95114858141827} ;
+    210.95114858141827 };
 
    double b_a[3600] = { -221.86203408940816, 1.7935051601617053E-14,
     6.8847619827685469E-14, -21.293254106153611, 1.8032929589223377E-14,
@@ -4980,26 +4863,27 @@ void CoordinatorBase<T>::MPC_Guidance_v3_sand()
     1.0, 0.0, 0.0, 0.32, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0,
     0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0 };
 
-   double B[9] = {0.332, 0.0, 0.0, 0.0, 0.332, 0.0, 0.0, 0.0, 0.332};
+   double B[9] = { 0.1, 0.0, 0.0, 0.0, 0.1, 0.0, 0.0, 0.0, 0.1
+  };
   /* double B[9] = { 0.68, 0.0, 0.0, 0.0, 0.332, 0.0, 0.0, 0.0, 0.394
   }; */
 
-   signed char A[400] = {  1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+   signed char A[400] = { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 };
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 };
 
   double IGA[7200];
   double A_data[3600];

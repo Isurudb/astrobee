@@ -23,16 +23,22 @@ void PrimaryNodelet::RunTest0(ros::NodeHandle *nh){
         NODELET_ERROR_STREAM("[PRIMARY/DMPC] Failed to Launch DMPC nodes.");
     }
     ROS_INFO("Initializing the position data....");
-    position_ref.x = 0.50;
-    position_ref.y =  -0.60;
+    position_ref.x = 0.5;
+    position_ref.y = -0.6;
     position_ref.z =  position_.z+0.00;
+   /*  z_nominal[0]=x0[0];
+      z_nominal[1]=x0[1];
+      z_nominal[2]=x0[2];
+      z_nominal[3]=x0[3];
+      z_nominal[4]=x0[4];
+      z_nominal[5]=x0[5]; */
     initialzation=true;
 
     ROS_INFO("Position data successfully initialized!");
 
     ROS_INFO("End of initialization............. <<< Test 0 >>> ..............");
 
-    //disable_default_ctl();
+   // disable_default_ctl();
     //check_regulate();  // check regulation until satisfied
     //ROS_INFO("Setting up the publisher ");
 
@@ -95,9 +101,14 @@ primary_status_.control_mode = "regulate";
         }
         else
         {
-            ctl_input.force.x=0;//-0.05*velocity_.x ;
+
+            ROS_INFO(" Deploying TRMPC for transverse motion  ex: [%f]  ey: [%f] ez: [%f]",position_error.x, position_error.y, position_error.z);
+            ctl_input.force.x = u_x*R_11 + u_y*R_21 + u_z*R_31;//-0.05*velocity_.x +0.005*position_error.x;
+            ctl_input.force.y = u_x*R_12 + u_y*R_22 + u_z*R_32;//-0.05*velocity_.y -0.005*position_error.y;
+            ctl_input.force.z = u_x*R_13 + u_y*R_23 + u_z*R_33;//-0.05*velocity_.z +0.005*position_error.z;
+            /* ctl_input.force.x=0;//-0.05*velocity_.x ;
             ctl_input.force.y=0;//-0.05*velocity_.y ;
-            ctl_input.force.z=0;//-0.05*velocity_.z ;
+            ctl_input.force.z=0;//-0.05*velocity_.z ; */
         }
          if (sqrt(q_e.getX()*q_e.getX()+q_e.getY()*q_e.getY()+q_e.getZ()*q_e.getZ())<0.05){
                 rotation_done = true;
@@ -176,7 +187,8 @@ primary_status_.control_mode = "regulate";
 
         if (rotation_done)
         {
-            ROS_INFO(" Deploying LMPC for transverse motion  ex: [%f]  ey: [%f] ez: [%f]",position_error.x, position_error.y, position_error.z);
+            ROS_INFO(" Deploying LMPC for transverse motion  ex: [%f]  ey: [%f] ez: [%f] \n Fx: [%f] Fy: [%f] Fz: [%f]",
+            position_error.x, position_error.y, position_error.z,X_QP[0],X_QP[1],X_QP[2]);
             ctl_input.force.x = u_x*R_11 + u_y*R_21 + u_z*R_31;//-0.05*velocity_.x +0.005*position_error.x;
             ctl_input.force.y = u_x*R_12 + u_y*R_22 + u_z*R_32;//-0.05*velocity_.y -0.005*position_error.y;
             ctl_input.force.z = u_x*R_13 + u_y*R_23 + u_z*R_33;//-0.05*velocity_.z +0.005*position_error.z;
@@ -184,9 +196,11 @@ primary_status_.control_mode = "regulate";
         }
         else
         {
-            ctl_input.force.x=0;//-0.05*velocity_.x ;
-            ctl_input.force.y=0;//-0.05*velocity_.y ;
-            ctl_input.force.z=0;//-0.05*velocity_.z ;
+            ROS_INFO(" Deploying LMPC for transverse motion  ex: [%f]  ey: [%f] ez: [%f] \n Fx: [%f] Fy: [%f] Fz: [%f]",
+            position_error.x, position_error.y, position_error.z,X_QP[0],X_QP[1],X_QP[2]);
+            ctl_input.force.x = u_x*R_11 + u_y*R_21 + u_z*R_31;//-0.05*velocity_.x +0.005*position_error.x;
+            ctl_input.force.y = u_x*R_12 + u_y*R_22 + u_z*R_32;//-0.05*velocity_.y -0.005*position_error.y;
+            ctl_input.force.z = u_x*R_13 + u_y*R_23 + u_z*R_33;//-0.05*velocity_.z +0.005*position_error.z;
         }
          if (sqrt(q_e.getX()*q_e.getX()+q_e.getY()*q_e.getY()+q_e.getZ()*q_e.getZ())<0.05){
                 rotation_done = true;
