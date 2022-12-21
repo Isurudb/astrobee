@@ -9,7 +9,7 @@ e0c0592329090fbef754b5850130165b  opt/asap/include/config_reader/config_reader.h
 a37e73d1829d468af7ca97256398505d  opt/asap/include/coordinator/StatusSecondary.h
 cc5113ccc71bd5e02e9675790d46d77d  opt/asap/include/coordinator/TestNumber.h
 ab7c20696bc2cf0f9b01c230448e3cff  opt/asap/include/coordinator/controller1.h
-0b99ca90f32e1904ccf42c0630ad22c7  opt/asap/include/coordinator/coordinator.tpp
+b2ef50d2ed8ae66d761ba99972aeeef3  opt/asap/include/coordinator/coordinator.tpp
 218ee3b986575103acfc29c402a4a9a9  opt/asap/include/coordinator/mldivide.h
 69798260072afa6cf4e829b8ff4f18ff  opt/asap/include/coordinator/primary_dmpc_methods.hpp
 f9bb49a499153ad4ba2bccc7cde0c24f  opt/asap/include/coordinator/primary_nodelet.h
@@ -234,8 +234,8 @@ ef95ba9dd949b18ff689f9d0090923ae  opt/asap/include/ff_util/ff_serialization.h
 af97037b9e8aa8c4de12dbcb79d0d152  opt/asap/include/ff_util/ff_service.h
 b1e50eebae3c9f328da5e17fe1d22a2c  opt/asap/include/ff_util/perf_timer.h
 c0e34c938cdf7bc21ef1c526f78a48c0  opt/asap/include/msg_conversions/msg_conversions.h
-b7f4cc63932f4b48ed01e0878ff3ad28  opt/asap/lib/libPrimaryNodelet.so
-643a64d6bf6fe4a6b40cb4f70c296159  opt/asap/lib/libSecondaryNodelet.so
+173cedc4ba0c780b08ddc491d11c5af2  opt/asap/lib/libPrimaryNodelet.so
+29f456a68f944fd11829b4df6210b255  opt/asap/lib/libSecondaryNodelet.so
 df2e16ae4452b4ea68b36db2b16f6423  opt/asap/lib/libconfig_client.so
 ffaa6271a205dec576a2e396dbc6a1fd  opt/asap/lib/libconfig_reader.so
 39f9e28d15927f4249a13f3eacfed741  opt/asap/lib/libconfig_server.so
