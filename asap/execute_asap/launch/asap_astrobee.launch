@@ -16,7 +16,8 @@ MIT Space Systems Laboratory
   <!-- Set OpenMP num threads for SLAM debugging -->
   <env name="OMP_NUM_THREADS" value="12" />
 
-  <node pkg="execute_asap" type="execute_asap.py" name="execute_asap" args="/ $(arg llp)" output="$(arg output)">
-    <param name="robotPrefix" value="bumble" />
-   </node>
+  <node
+    pkg="execute_asap" type="execute_asap.py" name="execute_asap"
+    args="/ $(arg llp)"
+    output="$(arg output)"/>
 </launch>
