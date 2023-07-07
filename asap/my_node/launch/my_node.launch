@@ -24,8 +24,7 @@
   <arg name="output" default="screen"/>          <!-- Where nodes should log    -->
 
   <!-- Load params for queen -->
-  <!--<rosparam command="load" file="$(find execute_asap)/config/primary_coord_params.yaml"/>-->
-  <rosparam command="load" file="$(find execute_asap)/config/secondary_coord_params.yaml"/>
+  <rosparam command="load" file="$(find execute_asap)/config/primary_coord_params.yaml"/>
 
   <node
     name="my_node" pkg="my_node" type="my_node.py"
