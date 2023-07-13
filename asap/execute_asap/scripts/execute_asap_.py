@@ -105,14 +105,15 @@ class ASAP:
             command = primary_launch_command
         elif self.my_role == 'secondary':
             if self.sim == "true":
-                secondary_launch_command = "roslaunch " + self.ASAP_SECONDARY_LAUNCH_PATH + " sim:=" + self.sim + " ground:=" + self.ground + " ns:=/" + self.bee_topic_prefixes[1]
+                secondary_launch_command = "roslaunch " + self.ASAP_SECONDARY_LAUNCH_PATH + " sim:=" + self.sim + " ground:=" + self.ground + " ns:=" + self.bee_topic_prefixes[1]
+                print(("[EXECUTE_ASAP]: Secondary launch files were called :",secondary_launch_command))
             else:
                 secondary_launch_command = "roslaunch " + self.ASAP_SECONDARY_LAUNCH_PATH + " sim:=" + self.sim + " ground:=" + self.ground + " ns:=/"\
                     + " llp:=" + self.llp_ip
             command = secondary_launch_command
         else:
             raise NameError('Invalid role.')
-
+        print(command)
         launch_proc = subprocess.Popen(command, shell=True)
 
     def stop_nodelets(self):
@@ -132,6 +133,7 @@ class ASAP:
             if self.sim == "true" and (arg_robot_name != "/"):
                 prefix = self.bee_topic_prefixes[1]
                 node_kill_list = self.NODE_LIST_SIM_SECONDARY
+                print(("[EXECUTE_ASAP]: Nodes to  kill",node_kill_list))
             else:
                 prefix = "/"
                 node_kill_list = self.NODE_LIST_HARDWARE_SECONDARY
@@ -139,7 +141,8 @@ class ASAP:
         # Use ROS to kill processes
         processes = []
         for node in node_kill_list:
-            command = "rosnode kill " + prefix + node
+            command = "rosnode kill "  + node #prefix
+            print(("[EXECUTE_ASAP]:",command,'_'*1000))
             p = subprocess.Popen(command, shell=True)
             processes.append(p)
         time.sleep(5)
@@ -236,6 +239,7 @@ class ASAP:
             asap_primary.primary_execute_test(self.bee_topic_prefixes[0], test_number, ground, sim)
         elif self.my_role == 'secondary':
             # Run secondary_asap for test parameters
+            print("Run asap for test parameters")
             asap_secondary.secondary_execute_test(self.bee_topic_prefixes[1], test_number, ground, sim)
 
         # Ensure params are set before nodelets start running
@@ -338,6 +342,8 @@ class ASAP:
             self.gds_telem = [
                 str(status_msg.test_finished),
                 str(status_msg.coord_ok),
+                str(status_msg.control_mode),
+                str(status_msg.regulate_finished),
                 ".",
                 ".",
                 ".",
@@ -349,10 +355,13 @@ class ASAP:
                 ".",
                 ".",
                 ".",
-                str(status_msg.solver_status),
-                str(status_msg.cost_value),
-                str(status_msg.kkt_value),
-                str(status_msg.sol_time)]
+                ".",
+                "."]
+                #".",
+                #str(status_msg.solver_status),
+                #str(status_msg.cost_value),
+                #str(status_msg.kkt_value),
+                #str(status_msg.sol_time)]
 
     def update_gds_telemetry(self, global_gds_param_count):
         """ Set params to send GDS telemetry (5x slower).
@@ -446,6 +455,7 @@ class ASAP:
 
             # 2) publish test_number and start all nodelets (including coordinator)
             self.publish_test_num(self.test_num, self.my_role)
+            #print("Test Number: ",self.test_num, "Role: ",self.my_role)
 
             # Update GDS ROS params (ground telemetry)
             param_set_count += 1
@@ -457,6 +467,7 @@ class ASAP:
             # Start test if not -1. Otherwise, wait.
             if (self.test_num is not -1 and self.test_started is False):
                 if self.test_num_okay():  # sanity check the test num before sending
+                    #print("Test okay !!")
                     self.run_test()
             if (self.test_num == -1 and self.test_started is True):
                 self.stop_test()
@@ -486,9 +497,11 @@ if __name__ == "__main__":
     # The hardware launch process will always use "/"
     # Simulation launches will always use "/robot_prefix 0"
     myargv = rospy.myargv(argv=sys.argv)
+    robo_name=rospy.get_param("~robotPrefix")
 
     try:  # simulation
-        arg_robot_name = myargv[1]  # robot_prefix, SIMULATION ONLY!
+        #arg_robot_name = myargv[1]  # robot_prefix, SIMULATION ONLY!
+        arg_robot_name=robo_name
         if arg_robot_name == "honey":
             ASAP_main.my_role = 'primary'
             test_number_msg_name = "/honey/asap/test_number"

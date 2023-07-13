@@ -23,7 +23,7 @@
   <arg name="dds" default="false"/>              <!-- Should DDS be started     -->
   <arg name="output" default="screen"/>          <!-- Where nodes should log    -->
 
-  <!-- Load params for queen -->
+  <!-- Load params for wannabee -->
   <rosparam command="load" file="$(find execute_asap)/config/primary_coord_params.yaml"/>
 
   <node

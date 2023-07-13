@@ -7,7 +7,7 @@ The primary coordinator, which derives from CoorindatorBase and adds methods for
 #include "coordinator/primary_tests.hpp"
 #include "ros/ros.h"
 //#include "std_msgs/Int32.h"
-/* ************************************************************************** */
+/* ************************************************************************* */
 void PrimaryNodelet::Initialize(ros::NodeHandle* nh) {
   /**
   * @brief This is called when the nodelet is loaded into the nodelet manager
@@ -23,6 +23,7 @@ void PrimaryNodelet::Initialize(ros::NodeHandle* nh) {
   pub_flight_mode_ = nh->advertise<ff_msgs::FlightMode>(TOPIC_MOBILITY_FLIGHT_MODE, 1, true);  // FlightMode
   pub_status_ = nh->advertise<coordinator::StatusPrimary>(TOPIC_ASAP_STATUS, 5, true);
   pub_ctl_=nh->advertise<ff_msgs::FamCommand>(TOPIC_GNC_CTL_CMD,1);
+  VL_status=nh->advertise<coordinator::Prediction>(VIRTUAL_LEADER_TOPIC,1);
   
   // subscribers
   sub_flight_mode_= nh->subscribe<ff_msgs::FlightMode>(TOPIC_MOBILITY_FLIGHT_MODE, 5,
@@ -33,9 +34,12 @@ void PrimaryNodelet::Initialize(ros::NodeHandle* nh) {
     boost::bind(&PrimaryNodelet::test_num_callback, this, _1));
   sub_flight_mode_= nh->subscribe<ff_msgs::FlightMode>(TOPIC_MOBILITY_FLIGHT_MODE, 5,
     boost::bind(&PrimaryNodelet::flight_mode_callback, this, _1));  // flight mode setter
-  sub_ekf_ = nh->subscribe<ff_msgs::EkfState>("gnc/ekf", 5,
+  sub_ekf_ = nh->subscribe<ff_msgs::EkfState>("/gnc/ekf",1,
     boost::bind(&PrimaryNodelet::ekf_callback, this, _1));
-  
+  // sub_VL_status= nh->subscribe<coordinator::Prediction>(VIRTUAL_LEADER_TOPIC, 5,
+  //   boost::bind(&PrimaryNodelet::VL_callback, this, _1));
+
+
   // services
   serv_ctl_enable_ = nh->serviceClient<std_srvs::SetBool>(SERVICE_GNC_CTL_ENABLE);
 

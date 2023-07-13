@@ -30,9 +30,9 @@ MIT Space Systems Laboratory
         args="standalone PrimaryNodelet"
         output="$(arg output)"/>
 
-    <!-- Sample node -->
+    <!-- Sample node 
     <node pkg="my_node" type="my_node.py" name="my_node"
         required="false" respawn="false"
-        output="$(arg output)"/>
+        output="$(arg output)"/>-->
 </launch>
 

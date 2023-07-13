@@ -6,7 +6,7 @@ MIT Space Systems Laboratory
 -->
 
 <launch>
-  <arg name="robot" default="$(optenv ASTROBEE_ROBOT honey)" />
+  <arg name="robot" default="$(optenv ASTROBEE_ROBOT bumble)" />
   <arg name="world" default="$(optenv ASTROBEE_WORLD iss)" />
   <arg name="llp" default="local" />          <!-- LLP IP address            -->
   <arg name="mlp" default="local" />          <!-- MLP IP address           -->

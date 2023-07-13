@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 from threading import Thread
 import sys
@@ -63,3 +63,4 @@ if (__name__ == "__main__"):
         pub_test_number.publish(msg)
 
     print('GDS parameters set.')
+

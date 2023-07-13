@@ -27,6 +27,13 @@ MIT Space Systems Laboratory
 
   <node pkg="nodelet" type="nodelet" name="secondary_coordinator"
     required="false" respawn="false"
-    args="load coordinator/SecondaryNodelet secondary_coordinator"
+    args="standalone SecondaryNodelet"
     output="$(arg output)"/>
+   
+  <!-- Sample node 
+    <node pkg="my_node" type="my_node.py" name="my_node"
+        required="false" respawn="false"
+    args="load coordinator/SecondaryNodelet secondary_coordinator"
+        output="$(arg output)"/>-->
+
 </launch>

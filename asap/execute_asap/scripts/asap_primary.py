@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 """
 # asap_primary.py
 
@@ -51,3 +51,4 @@ def set_params_IC(r_RI, r_CR, q_CR, r_TR):
     rospy.set_param('/asap/primary/qy_start', q_CR[1])  # y
     rospy.set_param('/asap/primary/qz_start', q_CR[2])  # z
     rospy.set_param('/asap/primary/qw_start', q_CR[3])  # w
+

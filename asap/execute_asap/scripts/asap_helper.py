@@ -24,3 +24,4 @@ def create_namespaced_topics(topic_list, sim=False, bee_name=""):
     namespaced_topics = ' '.join(namespaced_topics)  # add space between each name for rosbag
     namespaced_topics = " " + namespaced_topics  # add leading space
     return namespaced_topics
+
