@@ -11,6 +11,7 @@ find_package(catkin2 REQUIRED COMPONENTS
   trajectory_msgs
   sensor_msgs
   ff_msgs
+  rospy
 )
 
 catkin_package(
@@ -27,5 +28,4 @@ install(DIRECTORY launch/
 install(DIRECTORY config/ DESTINATION share/${PROJECT_NAME}/config)
 
 install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/scripts/ DESTINATION share/${PROJECT_NAME}/scripts USE_SOURCE_PERMISSIONS)
-
 install(PROGRAMS ${CMAKE_CURRENT_SOURCE_DIR}/../../astrobee/scripts/env_wrapper_asap.sh DESTINATION ${CMAKE_INSTALL_PREFIX} )

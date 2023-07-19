@@ -4,6 +4,7 @@
 #export DH_VERBOSE = 1
 
 ifeq ($(DEB_HOST_ARCH),armhf)
+	export DEB_BUILD_OPTIONS +=nostrip
 	export FSW_CONFIG_FLAGS = -a -w debian -n debian -p src/debian/tmp
 else
 	export FSW_CONFIG_FLAGS = -l -w debian_native -n debian_native -p src/debian/tmp/opt/astrobee

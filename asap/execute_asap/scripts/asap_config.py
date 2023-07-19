@@ -33,9 +33,9 @@ ASAP_SECONDARY_LAUNCH_PATH = rospack.get_path("execute_asap") + "/launch/asap_se
 
 # -------------------------------------------------------------------------------------------------------------
 # Node list for shutdown for ASAP nodes
-NODE_LIST_SIM_PRIMARY = ["primary_coordinator", "my_node"]
+NODE_LIST_SIM_PRIMARY = ["primary_coordinator"]
 NODE_LIST_HARDWARE_PRIMARY = ["primary_coordinator", "my_node"]
-NODE_LIST_SIM_SECONDARY = ["secondary_coordinator", "my_node"]
+NODE_LIST_SIM_SECONDARY = ["secondary_coordinator"]
 NODE_LIST_HARDWARE_SECONDARY = ["secondary_coordinator", "my_node"]
 
 
@@ -46,10 +46,12 @@ NODE_LIST_HARDWARE_SECONDARY = ["secondary_coordinator", "my_node"]
 FSW_TOPICS = ["gnc/ctl/command", "gnc/ekf", "gnc/ctl/setpoint", "hw/pmc/command", "hw/imu", "mob/flight_mode", "mob/inertia"]
 FSW_HW_TOPICS = create_namespaced_topics(FSW_TOPICS, sim=False)
 FSW_SIM_TOPICS = create_namespaced_topics(FSW_TOPICS, sim=True, bee_name="queen")
+FSW_SIM_SECONDARY_TOPICS = create_namespaced_topics(FSW_TOPICS, sim=True, bee_name="bumble")
 
 # Sim only topics (ground truth)
 SIM_ONLY = ["loc/truth/pose", "loc/truth/twist"]
 SIM_ONLY_TOPICS = create_namespaced_topics(SIM_ONLY, sim=True, bee_name="queen")
+SIM_ONLY_SECONDARY_TOPICS = create_namespaced_topics(SIM_ONLY, sim=True, bee_name="bumble")
 
 # Localization topics
 LOC_TOPICS = ["loc/ar/features", "loc/ml/features", "loc/of/features", "graph_loc/state", "sparse_mapping/pose"]
@@ -65,15 +67,17 @@ SAMPLE_PRIMARY = ["rattle/test_instruct", "rattle/rrt_high_level/status", "rattl
 SAMPLE_HW_PRIMARY_TOPICS = create_namespaced_topics(SAMPLE_PRIMARY, sim=False)
 SAMPLE_SIM_PRIMARY_TOPICS = create_namespaced_topics(SAMPLE_PRIMARY, sim=True, bee_name="queen")
 
+SAMPLE_HW_SECONDARY_TOPICS = create_namespaced_topics(SAMPLE_PRIMARY, sim=False)
+SAMPLE_SIM_SECONDARY_TOPICS = create_namespaced_topics(SAMPLE_PRIMARY, sim=True, bee_name="bumble")
 # -------------------------------------------------------------------------------------------------------------
 # All topics for recording
 TOPICS_HARDWARE_PRIMARY = FSW_HW_TOPICS + LOC_HW_TOPICS + SAMPLE_HW_PRIMARY_TOPICS
 
 TOPICS_SIM_PRIMARY = SIM_ONLY_TOPICS + FSW_SIM_TOPICS + SAMPLE_SIM_PRIMARY_TOPICS
 
-TOPICS_HARDWARE_SECONDARY = FSW_HW_TOPICS + LOC_HW_TOPICS
+TOPICS_HARDWARE_SECONDARY = FSW_HW_TOPICS + LOC_HW_TOPICS + SAMPLE_HW_PRIMARY_TOPICS
 
-TOPICS_SIM_SECONDARY = SIM_ONLY_TOPICS + FSW_SIM_TOPICS
+TOPICS_SIM_SECONDARY = SIM_ONLY_SECONDARY_TOPICS + FSW_SIM_SECONDARY_TOPICS 
 
 
 if __name__ == "__main__":
