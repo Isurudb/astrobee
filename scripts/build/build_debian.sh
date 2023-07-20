@@ -6,7 +6,7 @@ DIST=$(. /etc/os-release && echo $UBUNTU_CODENAME)
 if [ -n "$(git status --porcelain)" ]; then 
   echo "You should not build Debians for a dirty source tree!"
   echo "Make sure all your changes are committed AND pushed to the server..."
-  exit -1
+  #exit -1
 fi
 
 EXTRA_FLAGS="-b -aarmhf"

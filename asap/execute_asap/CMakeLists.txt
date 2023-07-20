@@ -11,7 +11,6 @@ find_package(catkin2 REQUIRED COMPONENTS
   trajectory_msgs
   sensor_msgs
   ff_msgs
-  rospy
 )
 
 catkin_package(
