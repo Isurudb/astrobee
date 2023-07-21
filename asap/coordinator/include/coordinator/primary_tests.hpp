@@ -8,7 +8,7 @@
 void PrimaryNodelet::RunTest0(ros::NodeHandle *nh){
     int system_ret;
     std::string undock_command;
-     undock_command = "rosrun executive teleop_tool -move -pos '-0.3 0.3' -ns 'bsharp'";//"rosrun dock dock_tool -undock";
+     undock_command = "rosrun executive teleop_tool -move -pos '-0.3 0.3' ";//"rosrun dock dock_tool -undock";
     NODELET_INFO_STREAM("[PRIMARY_COORD]: Congratulations, you have passed quick checkout. " 
     "May your days be blessed with only warnings and no errors.");
     
@@ -28,7 +28,7 @@ void PrimaryNodelet::RunTest0(ros::NodeHandle *nh){
     // position_ref.z =  4.4;
     robot = "Primary";
 
-    position_ref.x = position_.x + 0.5;
+    position_ref.x = position_.x + 0.4;
     position_ref.y = position_.y +0;
     position_ref.z = position_.z; +0;
 
