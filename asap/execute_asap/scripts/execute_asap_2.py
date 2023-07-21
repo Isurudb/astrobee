@@ -301,7 +301,7 @@ class ASAP:
 
         # for role
         if self.gds_role == "robot_name":  # if role has not been set by GDS
-            if name_data.data == "Honey" or name_data.data == "Queen" or name_data.data == "Bsharp":
+            if name_data.data == "Honey" or name_data.data == "Queen" or name_data.data == "wannabee":
                 self.my_role = 'primary'
             else:
                 self.my_role = 'secondary'
