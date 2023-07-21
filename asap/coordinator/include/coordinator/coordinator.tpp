@@ -74,7 +74,7 @@ Every test has a test#() function available in case it is needed by asap.py
 
 static std::string TOPIC_ASAP_STATUS = "/wannabee/asap/status";
 static std::string TOPIC_ASAP_TEST_NUMBER = "/wannabee/asap/test_number";
-static std::string TOPIC_GNC_CTL_CMD = "/wannabee/gnc/ctl/command";
+static std::string TOPIC_GNC_CTL_CMD = "/gnc/ctl/command";
 static std::string TOPIC_ASAP_STATUS_s = "/bumble/asap/status";
 static std::string TOPIC_ASAP_TEST_NUMBER_s = "/bumble/asap/test_number";
 static std::string TOPIC_GNC_CTL_CMD_s = "/bumble/gnc/ctl/command";
@@ -630,10 +630,10 @@ void CoordinatorBase<T>::ekf_callback(const ff_msgs::EkfState::ConstPtr msg) {
     // step_PID(); //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<ID
     // }
     // else if(Estimate_status=="Good"){
-    // step_PID_good();
+    step_PID_good();
     // }
     // else if(Estimate_status=="Worst"){
-    step_PID_worst();
+    //step_PID_worst();
     // }
     //Vitual leader inbound <<<<<<<<<<<<<<<<<<<<<<<<<< ID
 
@@ -685,7 +685,7 @@ void CoordinatorBase<T>::ekf_callback(const ff_msgs::EkfState::ConstPtr msg) {
       x0_vl[3]=velocity_.x;
       x0_vl[4]=velocity_.y;
       x0_vl[5]=velocity_.z;
-      vl_pred();
+     /*  vl_pred();
       
       mpc_pred.x0.x = x0_vl[0];         mpc_pred.x0.y = x0_vl[1];       mpc_pred.x0.z = x0_vl[2];
       mpc_pred.v0.x = x0_vl[3];         mpc_pred.v0.y = x0_vl[4];       mpc_pred.v0.z = x0_vl[5];
@@ -707,7 +707,7 @@ void CoordinatorBase<T>::ekf_callback(const ff_msgs::EkfState::ConstPtr msg) {
       mpc_pred.v5.x = x_pred[27];         mpc_pred.v5.y = x_pred[28];       mpc_pred.v5.z = x_pred[29];
 
       mpc_pred.x6.x = x_pred[30];         mpc_pred.x6.y = x_pred[31];       mpc_pred.x6.z = x_pred[32];
-      mpc_pred.v6.x = x_pred[33];         mpc_pred.v6.y = x_pred[34];       mpc_pred.v6.z = x_pred[35];
+      mpc_pred.v6.x = x_pred[33];         mpc_pred.v6.y = x_pred[34];       mpc_pred.v6.z = x_pred[35]; */
       MPC();
       }
        
