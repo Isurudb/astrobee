@@ -27,6 +27,11 @@ def primary_execute_test(bee_topic_prefix, test_number=-1, ground='false', sim='
     rospy.set_param('/asap/ground', ground)  # options are: ['false', 'true']
     rospy.set_param('/asap/sim', sim)  # options are: ['false', 'true']
 
+    
+    rospy.set_param('/asap/secondary_robot_name', 'wannabee')  # options are: ['false', 'true']
+    rospy.set_param('/asap/primary_robot_name', 'bsharp')  # options are: ['false', 'true']
+
+
     if (ground == "true"):
         r_RI = [0.0, 0.0, 0.0]  # the test volume reference frame (TVR) wrt INERTIAL frame
         r_CR = [0.0, 0.6, -0.7]  # primary position wrt TVR frame
