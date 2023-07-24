@@ -11,3 +11,6 @@
 	path = description/media
 	url = https://github.com/nasa/astrobee_media.git
 	shallow = true
+[submodule "asap"]
+	path = asap
+	url = git@github.com:Isurudb/ASAP.git
