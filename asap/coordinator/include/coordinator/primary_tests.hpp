@@ -28,9 +28,9 @@ void PrimaryNodelet::RunTest0(ros::NodeHandle *nh){
     // position_ref.z =  4.4;
     robot = "Primary";
 
-    position_ref.x = position_.x + 0.4;
-    position_ref.y = position_.y +0;
-    position_ref.z = position_.z; +0;
+    position_ref.x = position_.x + x0_(0);
+    position_ref.y = position_.y + x0_(1);
+    position_ref.z = position_.z; +x0_(2);
 
     //debug quaternion ambiguity
     /*q 0_x = attitude.x;
@@ -107,9 +107,63 @@ primary_status_.control_mode = "regulate";
         float ey =position_error.y;
         float ez =position_error.z;
  
-        ctl_input.torque.x=arg_tau_x;//-0.02*q_e.getX()-0.2*omega.x;
-        ctl_input.torque.y=arg_tau_y;//-0.02*q_e.getY()-0.2*omega.y;
-        ctl_input.torque.z=arg_tau_z;//-0.02*q_e.getZ()-0.2*omega.z;
+        //ctl_input.torque.x=arg_tau_x;//-0.02*q_e.getX()-0.2*omega.x;
+        //ctl_input.torque.y=arg_tau_y;//-0.02*q_e.getY()-0.2*omega.y;
+        //ctl_input.torque.z=arg_tau_z;//-0.02*q_e.getZ()-0.2*omega.z;
+
+
+           
+        if ( (arg_tau_x>0.01))
+        {
+            ctl_input.torque.x=0.01;
+        }
+        else if (arg_tau_x<-0.01)
+        {
+            ctl_input.torque.x=-0.01;
+
+        }
+
+        else
+        {
+
+            ctl_input.torque.x=arg_tau_x;
+        }
+       // -------------------------------------
+        
+        if ( (arg_tau_y>0.01))
+        {
+            ctl_input.torque.y=0.01;
+        }
+        else if (arg_tau_y<-0.01)
+        {
+            ctl_input.torque.y=-0.01;
+
+        }
+
+        else
+        {
+
+            ctl_input.torque.y=arg_tau_y;
+        }
+
+        //-----------------------------
+
+        if ( (arg_tau_z>0.01))
+        {
+            ctl_input.torque.z=0.01;
+        }
+        else if (arg_tau_z<-0.01)
+        {
+            ctl_input.torque.z=-0.01;
+
+        }
+
+        else
+        {
+
+            ctl_input.torque.z=arg_tau_z;
+        }
+        
 
         gnc_setpoint.header.frame_id="body";
         gnc_setpoint.header.stamp=ros::Time::now();
@@ -145,6 +199,9 @@ primary_status_.control_mode = "regulate";
                 
                 ROS_INFO("qx: [%f]  qy: [%f] qz: [%f] qw: [%f]\n", q_e.getX()*q_e.getX(),q_e.getY()*q_e.getY(),q_e.getZ()*q_e.getZ(),q_e.getW());
             }
+
+
+            
         
          t=0;
 

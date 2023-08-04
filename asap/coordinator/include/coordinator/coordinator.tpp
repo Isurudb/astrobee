@@ -247,6 +247,10 @@ float arg_x_e = 0.0;
 // '<Root>/tau_z'
  float arg_tau_z;
 
+Eigen::Vector3d x0_;
+Eigen::Vector4d a0_;
+
+
 double x0[6];
 double x0_vl[6];
 double x_pred[120]={0};
@@ -268,6 +272,8 @@ double inti_e_z=0;
 float q0_x = 0;
 float q0_y = 0;
 float q0_z = 0;
+
+double L=0.5,L0=0.5;
 
 double z_nominal[6];
 double zp_nextNominal[6];
@@ -608,8 +614,8 @@ void CoordinatorBase<T>::ekf_callback(const ff_msgs::EkfState::ConstPtr msg) {
         velocity_.y=vy - velocity.y;
         velocity_.z=vz - velocity.z; */
 
-        position_error_2.x = position_.x - pos_ref2.x;
-        position_error_2.y = position_.y - pos_ref2.y + 0.5;
+        position_error_2.x = position_.x - pos_ref2.x +L;
+        position_error_2.y = position_.y - pos_ref2.y ;//+ 0.5;
         position_error_2.z = position_.z - pos_ref2.z;
 
         velocity_.x=vx - vel_ref_2.x;

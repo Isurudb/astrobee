@@ -32,12 +32,27 @@ void SecondaryNodelet::RunTest0(ros::NodeHandle *nh){
     
      robot = "Secondary";
     //RunTest1(nh);
-    position_ref.x = position_.x + 0;
-    position_ref.y = position_.y + 3.0;
-    position_ref.z = position_.z; +0;
+    position_ref.x = position_.x + x0_(0);
+    position_ref.y = position_.y + x0_(1);
+    position_ref.z = position_.z; + x0_(2);
+
+     //double L0 L;
+    L0= sqrt( (pos_ref2.x - position_.x)*(pos_ref2.x - position_.x) + (pos_ref2.y - position_.y)*(pos_ref2.y - position_.y) +  (pos_ref2.z - position_.z)*(pos_ref2.z - position_.z) );
+    L=L0;
+    for (int i = 0; i < 50; i++) 
+    {
+        L0 = sqrt( (pos_ref2.x - position_.x)*(pos_ref2.x - position_.x) + (pos_ref2.y - position_.y)*(pos_ref2.y - position_.y) +  (pos_ref2.z - position_.z)*(pos_ref2.z - position_.z) );
+        L=L+0.01*(L-L0);
+        //ROS_INFO("Esitmated L is L0: %f  L: %f",L0,L); 
+    
+    }
+
+
+
      //run_test_0=true;
     NODELET_DEBUG_STREAM("[PRIMARY COORD]: ...test complete!");
-    ROS_INFO("New Goal positions are x: %f y: %f z: %f",position_ref.x,position_ref.y,position_ref.z); 
+    //ROS_INFO("New Goal positions are x: %f y: %f z: %f",position_ref.x,position_ref.y,position_ref.z); 
+      ROS_INFO("Esitmated L is : %f ",L); 
     base_status_.test_finished = false;
 };
 
@@ -109,8 +124,59 @@ secondary_status_.control_mode = "regulate";
          }
          t=0;
          }
+            
+           
+        if ( (arg_tau_x>0.01))
+        {
+            ctl_input.torque.x=0.01;
+        }
+        else if (arg_tau_x<-0.01)
+        {
+            ctl_input.torque.x=-0.01;
 
+        }
 
+        else
+        {
+
+            ctl_input.torque.x=arg_tau_x;
+        }
+       // -------------------------------------
+        
+        if ( (arg_tau_y>0.01))
+        {
+            ctl_input.torque.y=0.01;
+        }
+        else if (arg_tau_y<-0.01)
+        {
+            ctl_input.torque.y=-0.01;
+
+        }
+
+        else
+        {
+
+            ctl_input.torque.y=arg_tau_y;
+        }
+
+        //-----------------------------
+
+        if ( (arg_tau_z>0.01))
+        {
+            ctl_input.torque.z=0.01;
+        }
+        else if (arg_tau_z<-0.01)
+        {
+            ctl_input.torque.z=-0.01;
+
+        }
+
+        else
+        {
+
+            ctl_input.torque.z=arg_tau_z;
+        }
+        
         
         gnc_setpoint.header.frame_id="body";
         gnc_setpoint.header.stamp=ros::Time::now();
@@ -122,9 +188,9 @@ secondary_status_.control_mode = "regulate";
         
 
         
-        ctl_input.torque.x=arg_tau_x;//-0.02*q_e.getX()-0.2*omega.x;
-        ctl_input.torque.y=arg_tau_y;//-0.02*q_e.getY()-0.2*omega.y;
-        ctl_input.torque.z=arg_tau_z;//-0.02*q_e.getZ()-0.2*omega.z;
+        //ctl_input.torque.x=arg_tau_x;//-0.02*q_e.getX()-0.2*omega.x;
+        //ctl_input.torque.y=arg_tau_y;//-0.02*q_e.getY()-0.2*omega.y;
+        //ctl_input.torque.z=arg_tau_z;//-0.02*q_e.getZ()-0.2*omega.z;
   
         
 
