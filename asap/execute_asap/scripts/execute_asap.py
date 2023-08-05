@@ -91,6 +91,9 @@ class ASAP:
         self.gds_roam_bagger = "enabled"  # {enabled or disabled} is the roam bagger enabled?
         self.bag_robot_name = "bumble"
         self.gds_telem = ['.'] * 17  # telemetry to send to GDS, TODO: update start size if modifying or APK will error!
+        self.primary_robot_name=""
+        self.secondary_robot_name=""
+        self.goal="0,0,0"
 
     def start_nodelets(self):
         """ Start up all nodelets. Works for /robot_prefix/ or / namespaces.
@@ -98,7 +101,7 @@ class ASAP:
         """
         if self.my_role == 'primary':
             if self.sim == "true":
-                primary_launch_command = "roslaunch " + self.ASAP_PRIMARY_LAUNCH_PATH + " sim:=" + self.sim + " ground:=" + self.ground + " ns:=" + self.bee_topic_prefixes[0]
+                primary_launch_command = "roslaunch " + self.ASAP_PRIMARY_LAUNCH_PATH + " sim:=" + self.sim + " ground:=" + self.ground + " ns:=/" + self.bee_topic_prefixes[0]
             else:
                 primary_launch_command = "roslaunch " + self.ASAP_PRIMARY_LAUNCH_PATH + " sim:=" + self.sim + " ground:=" + self.ground + " ns:=/"\
                     + " llp:=" + self.llp_ip
@@ -139,7 +142,7 @@ class ASAP:
         # Use ROS to kill processes
         processes = []
         for node in node_kill_list:
-            command = "rosnode kill " + prefix + node
+            command = "rosnode kill " + node
             p = subprocess.Popen(command, shell=True)
             processes.append(p)
         time.sleep(5)
@@ -233,10 +236,13 @@ class ASAP:
         # Start payload nodes/nodelets
         if self.my_role == 'primary':
             # Run primary_asap for test parameters
-            asap_primary.primary_execute_test(self.bee_topic_prefixes[0], test_number, ground, sim)
+            asap_primary.primary_execute_test( self.bee_topic_prefixes[1], test_number,ground, sim,primary_robot_name=self.primary_robot_name,secondary_robot_name=self.secondary_robot_name,goal=self.goal)
+            #asap_primary.primary_execute_test(self.bee_topic_prefixes[0], test_number, ground, sim)
         elif self.my_role == 'secondary':
             # Run secondary_asap for test parameters
-            asap_secondary.secondary_execute_test(self.bee_topic_prefixes[1], test_number, ground, sim)
+
+            asap_secondary.secondary_execute_test(self.bee_topic_prefixes[1], test_number, ground, sim,primary_robot_name=self.primary_robot_name,secondary_robot_name=self.secondary_robot_name,goal=self.goal)
+            #asap_secondary.secondary_execute_test(self.bee_topic_prefixes[1], test_number, ground, sim)
 
         # Ensure params are set before nodelets start running
         time.sleep(2)
@@ -338,6 +344,8 @@ class ASAP:
             self.gds_telem = [
                 str(status_msg.test_finished),
                 str(status_msg.coord_ok),
+                str(status_msg.control_mode),
+                str(status_msg.regulate_finished),
                 ".",
                 ".",
                 ".",
@@ -349,11 +357,8 @@ class ASAP:
                 ".",
                 ".",
                 ".",
-                str(status_msg.solver_status),
-                str(status_msg.cost_value),
-                str(status_msg.kkt_value),
-                str(status_msg.sol_time)]
-
+                ".",
+                "."]
     def update_gds_telemetry(self, global_gds_param_count):
         """ Set params to send GDS telemetry (5x slower).
         TODO: Update telemetry vector in GDS!
@@ -486,9 +491,14 @@ if __name__ == "__main__":
     # The hardware launch process will always use "/"
     # Simulation launches will always use "/robot_prefix 0"
     myargv = rospy.myargv(argv=sys.argv)
+    print myargv
 
     try:  # simulation
         arg_robot_name = myargv[1]  # robot_prefix, SIMULATION ONLY!
+        ASAP_main.primary_robot_name=myargv[1] 
+        ASAP_main.bee_topic_prefixes[0]=myargv[1] 
+        ASAP_main.secondary_robot_name=myargv[4]
+        ASAP_main.goal=myargv[5]
         if arg_robot_name == "honey":
             ASAP_main.my_role = 'primary'
             test_number_msg_name = "/honey/asap/test_number"
@@ -519,10 +529,12 @@ if __name__ == "__main__":
 
     # ROS initialization
     # initialize GDS params (need to change astrobee android!)
+    gds_role=myargv[3]
+    print gds_role
     rospy.set_param("/asap/gds_ground", "false")  # 'true' or 'false'
     rospy.set_param("/asap/gds_sim", "hardware")  # 'hardware' or 'sim'
     rospy.set_param("/asap/gds_test_num", -1)
-    rospy.set_param("/asap/gds_role", "robot_name")  # default to using robot_name
+    rospy.set_param("/asap/gds_role", gds_role)  # default to using robot_name
     rospy.set_param("/asap/gds_roam_bagger", "enabled")  # "enabled" or "disabled"
 
     # subscriber for robot name topic
