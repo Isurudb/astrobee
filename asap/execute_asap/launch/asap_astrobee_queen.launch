@@ -17,6 +17,6 @@ MIT Space Systems Laboratory
   <env name="OMP_NUM_THREADS" value="12" />
 
   <node pkg="execute_asap" type="execute_asap_2.py" name="execute_asap_2" args="/ $(arg llp)" output="$(arg output)">
-    <param name="robotPrefix" value="bsharp" />
+    <param name="robotPrefix" value="queen" />
    </node>
 </launch>

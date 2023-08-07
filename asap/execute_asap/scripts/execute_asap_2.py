@@ -297,7 +297,7 @@ class ASAP:
         elif name_data.data == "Bumble":
             self.bag_robot_name = "bumble"
         elif name_data.data == "Queen":
-            self.bag_robot_name = "bsharp"
+            self.bag_robot_name = "queen"
 
         # for role
         if self.gds_role == "robot_name":  # if role has not been set by GDS
@@ -489,7 +489,7 @@ if __name__ == "__main__":
 
     # Set up the main testing interface.
     ASAP_main = ASAP(bee_roles=['primary', 'secondary', 'tertiary'],  # TODO: add tertiary interface
-                     bee_topic_prefixes=['/bsharp/', '/bumble/', '/honey/'])
+                     bee_topic_prefixes=['/queen/', '/bumble/', '/honey/'])
 
     signal(SIGINT, ASAP_main.handler)  # for ctl-c handling
 
@@ -512,11 +512,11 @@ if __name__ == "__main__":
             test_number_msg_name = "/bumble/asap/test_number"
             status_msg_name = "/bumble/asap/status"
             signal_msg_name = "/bumble/signals"
-        elif arg_robot_name == "bsharp":
+        elif arg_robot_name == "queen":
             ASAP_main.my_role = 'primary'
-            test_number_msg_name = "/bsharp/asap/test_number"
-            status_msg_name = "/bsharp/asap/status"
-            signal_msg_name = "/bsharp/signals"
+            test_number_msg_name = "/queen/asap/test_number"
+            status_msg_name = "/queen/asap/status"
+            signal_msg_name = "/queen/signals"
         elif arg_robot_name == "/":
             ASAP_main.my_role = 'primary'
             test_number_msg_name = "/asap/test_number"
