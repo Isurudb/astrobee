@@ -530,12 +530,15 @@ if __name__ == "__main__":
     # ROS initialization
     # initialize GDS params (need to change astrobee android!)
     gds_role=myargv[3]
-    print gds_role
+    coupled=myargv[6]
+    print gds_role,myargv
     rospy.set_param("/asap/gds_ground", "false")  # 'true' or 'false'
     rospy.set_param("/asap/gds_sim", "hardware")  # 'hardware' or 'sim'
     rospy.set_param("/asap/gds_test_num", -1)
     rospy.set_param("/asap/gds_role", gds_role)  # default to using robot_name
     rospy.set_param("/asap/gds_roam_bagger", "enabled")  # "enabled" or "disabled"
+    rospy.set_param("/asap/coupled", coupled)  # "enabled" or "disabled"
+
 
     # subscriber for robot name topic
     rospy.Subscriber("/robot_name", String, ASAP_main.bee_name_callback)

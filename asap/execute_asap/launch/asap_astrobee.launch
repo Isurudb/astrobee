@@ -6,6 +6,7 @@ Manually called to launch execute_asap.py on hardware.
 Keenan Albee and Charles Oestreich, 2021
 MIT Space Systems Laboratory
 -->
+
 <launch>
 
   <arg name="output" default="screen" />             <!-- Output to screen or log, change to log for ISS!    -->
@@ -15,12 +16,13 @@ MIT Space Systems Laboratory
   <arg name="robot" default="/" /> 
   <arg name="follower" default="bsharp" /> 
   <arg name="goal" default="0,0,0"/> 
+  <arg name="coupled" default="false"/> 
 
   <!-- Set OpenMP num threads for SLAM debugging -->
   <env name="OMP_NUM_THREADS" value="12" />
 
   <node
     pkg="execute_asap" type="execute_asap.py" name="execute_asap"
-    args="$(arg robot) $(arg llp) $(arg role) $(arg follower) $(arg goal)"
+    args="$(arg robot) $(arg llp) $(arg role) $(arg follower) $(arg goal) $(arg coupled)"
     output="$(arg output)"/>
 </launch>
