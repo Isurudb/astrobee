@@ -16,3 +16,7 @@
 
 /asap/primary/point_c_granite: [0.4, -0.4, -0.76, 0.0, 0.0, 1.0, 0.0]
 /asap/primary/point_c_iss: [10.8, -7.75, 4.3, 0.0, 0.0, -0.7071068, 0.7071068]
+
+/asap/primary/yaw: 1.507
+/asap/primary/pitch: 0
+/asap/primary/roll: 0

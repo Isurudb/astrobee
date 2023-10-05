@@ -33,9 +33,9 @@ ASAP_SECONDARY_LAUNCH_PATH = rospack.get_path("execute_asap") + "/launch/asap_se
 
 # -------------------------------------------------------------------------------------------------------------
 # Node list for shutdown for ASAP nodes
-NODE_LIST_SIM_PRIMARY = ["primary_coordinator"]
+NODE_LIST_SIM_PRIMARY = ["primary_coordinator","secondary_coordinator"]
 NODE_LIST_HARDWARE_PRIMARY = ["primary_coordinator", "my_node"]
-NODE_LIST_SIM_SECONDARY = ["secondary_coordinator"]
+NODE_LIST_SIM_SECONDARY = ["secondary_coordinator","primary_coordinator"]
 NODE_LIST_HARDWARE_SECONDARY = ["secondary_coordinator", "my_node"]
 
 

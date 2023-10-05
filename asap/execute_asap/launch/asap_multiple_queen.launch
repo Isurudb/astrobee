@@ -1,0 +1,12 @@
+<!-- <?xml version="1.0"?> -->
+<launch>
+<include file="$(find execute_asap)/launch/asap_astrobee.launch">
+    <arg name="node_name" default="execute_asap_queen"/>
+    <arg name="role" default="primary" /> 
+    <arg name="robot" default="queen" /> 
+    <arg name="follower" default="bumble" /> 
+</include>
+
+   
+
+</launch>

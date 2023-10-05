@@ -17,12 +17,13 @@ MIT Space Systems Laboratory
   <arg name="follower" default="bsharp" /> 
   <arg name="goal" default="0,0,0"/> 
   <arg name="coupled" default="false"/> 
+  <arg name="node_name" default="execute_asap"/>
 
   <!-- Set OpenMP num threads for SLAM debugging -->
   <env name="OMP_NUM_THREADS" value="12" />
 
   <node
-    pkg="execute_asap" type="execute_asap.py" name="execute_asap"
+    pkg="execute_asap" type="execute_asap.py" name="$(arg node_name)"
     args="$(arg robot) $(arg llp) $(arg role) $(arg follower) $(arg goal) $(arg coupled)"
     output="$(arg output)"/>
 </launch>
