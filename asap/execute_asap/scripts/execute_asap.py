@@ -491,14 +491,17 @@ if __name__ == "__main__":
     # The hardware launch process will always use "/"
     # Simulation launches will always use "/robot_prefix 0"
     myargv = rospy.myargv(argv=sys.argv)
-    print myargv
+    #print myargv
 
     try:  # simulation
         arg_robot_name = myargv[1]  # robot_prefix, SIMULATION ONLY!
+        #print "[EXECUTE_ASAP]: Robot        :",arg_robot_name
         ASAP_main.primary_robot_name=myargv[1] 
         ASAP_main.bee_topic_prefixes[0]=myargv[1] 
         ASAP_main.secondary_robot_name=myargv[4]
+        #print "[EXECUTE_ASAP]: Second Robot :",ASAP_main.secondary_robot_name
         ASAP_main.goal=myargv[5]
+        #print "[EXECUTE_ASAP]: Goal Position:",ASAP_main.goal
         if arg_robot_name == "honey":
             ASAP_main.my_role = 'primary'
             test_number_msg_name = "/honey/asap/test_number"
@@ -531,7 +534,7 @@ if __name__ == "__main__":
     # initialize GDS params (need to change astrobee android!)
     gds_role=myargv[3]
     coupled=myargv[6]
-    print gds_role,myargv
+    
     rospy.set_param("/asap/gds_ground", "false")  # 'true' or 'false'
     rospy.set_param("/asap/gds_sim", "hardware")  # 'hardware' or 'sim'
     rospy.set_param("/asap/gds_test_num", -1)
@@ -549,5 +552,13 @@ if __name__ == "__main__":
     pub_signal = rospy.Publisher(signal_msg_name, SignalState, queue_size=1, latch=True)
 
     time.sleep(1.0)  # wait for subs to come in
+    
     print("[EXECUTE_ASAP]: Initialized.")
+    print "[EXECUTE_ASAP]: Summary      :"
+    print "------------------------------"
+    print "[EXECUTE_ASAP]: Robot        :",arg_robot_name
+    print "[EXECUTE_ASAP]: Role         :",gds_role
+    print "[EXECUTE_ASAP]: coupled      :",coupled
+    print "[EXECUTE_ASAP]: Second Robot :",ASAP_main.secondary_robot_name
+    print "[EXECUTE_ASAP]: Goal Position:",ASAP_main.goal
     ASAP_main.ros_loop()
